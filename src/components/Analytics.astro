@@ -1,0 +1,19 @@
+---
+/**
+ * GoatCounter: contagem de visitas sem cookies e sem banner de consentimento.
+ * Só é incluído na build de produção e quando `site.goatcounter` estiver preenchido.
+ * Cliques em elementos com `data-goatcounter-click` viram eventos automaticamente.
+ */
+import { site } from '../data/site';
+
+const enabled = import.meta.env.PROD && site.goatcounter.length > 0;
+---
+
+{enabled && (
+  <script
+    is:inline
+    async
+    data-goatcounter={`https://${site.goatcounter}.goatcounter.com/count`}
+    src="https://gc.zgo.at/count.js"
+  ></script>
+)}

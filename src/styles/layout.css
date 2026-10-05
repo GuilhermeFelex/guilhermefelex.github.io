@@ -20,6 +20,10 @@
   .site-nav a[aria-current] { color: var(--accent); }
   .site-nav a[aria-current]::after { transform: scaleX(1); }
 }
+/* Seletor de idioma: discreto, ao lado da navegação no desktop e do botão Menu no celular. */
+.site-nav { margin-left: auto; }
+.lang-switch { display: inline-grid; min-width: 40px; min-height: 32px; margin-left: clamp(22px, 2.5vw, 42px); place-items: center; padding: 4px 10px; border: 1px solid var(--line); color: #c0cdd5; font: 500 12px var(--mono); letter-spacing: .08em; transition: border-color .2s ease, color .2s ease; }
+.lang-switch:hover, .lang-switch:focus-visible { border-color: var(--accent); color: var(--accent); }
 /* O botão é revelado no módulo responsive.css. */
 .menu-button { display: none; color: var(--text); background: transparent; border: 0; font: 13px var(--mono); }
 .site-footer { display: grid; grid-template-columns: 1.4fr 1fr 1fr; align-items: center; min-height: 100px; padding-inline: 42px; border-top: 1px solid var(--line); color: var(--muted); font: 12px var(--mono); text-transform: uppercase; }

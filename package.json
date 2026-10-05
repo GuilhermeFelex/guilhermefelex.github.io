@@ -7,7 +7,9 @@
     "dev": "astro dev",
     "build": "astro check && astro build",
     "preview": "astro preview",
-    "validate:responsive": "node scripts/validate-responsive.mjs"
+    "validate:responsive": "node scripts/validate-responsive.mjs",
+    "validate:a11y": "node scripts/validate-a11y.mjs",
+    "lighthouse": "lhci autorun"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
@@ -19,8 +21,10 @@
     "typescript": "^5.9.2"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
     "@iconify-json/lucide": "^1.2.140",
     "@iconify-json/simple-icons": "^1.2.99",
+    "@lhci/cli": "^0.15.1",
     "playwright": "^1.63.0"
   }
 }

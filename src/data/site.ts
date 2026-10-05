@@ -1,75 +1,30 @@
+/**
+ * Dados compartilhados pelos dois idiomas. Os textos da página ficam em src/i18n/content.ts.
+ */
 export const site = {
   name: 'Felex',
-  role: 'Desenvolvedor de Integração, Automação e Agentes de IA',
-  location: 'São Paulo, Brasil',
+  fullName: 'Guilherme Felex',
+  // Marca comercial: o site vende os serviços da FelexTech; o nome pessoal aparece como fundador.
+  brand: 'FelexTech',
   email: 'guilherme.felex@hotmail.com',
   social: {
     github: 'https://github.com/GuilhermeFelex',
     linkedin: 'https://www.linkedin.com/in/guilhermefelex/',
     instagram: 'https://www.instagram.com/felextech'
-  }
+  },
+  /**
+   * Analytics sem cookies (GoatCounter). Crie o site em goatcounter.com e informe só o código,
+   * por exemplo 'felextech' para felextech.goatcounter.com. Vazio desativa o script.
+   */
+  goatcounter: ''
 };
-
-export const expertise = [
-  {
-    icon: 'lucide:cable',
-    title: 'Integrações',
-    description: 'Sistemas que conversam entre si com segurança, rastreabilidade e contexto de negócio.',
-    tags: ['APIs', 'Webhooks', 'ERP', 'CRM', 'Marketplaces']
-  },
-  {
-    icon: 'lucide:workflow',
-    title: 'Automação',
-    description: 'Processos manuais transformados em fluxos confiáveis, mensuráveis e escaláveis.',
-    tags: ['RPA', 'n8n', 'Fluxos', 'Processos']
-  },
-  {
-    icon: 'lucide:brain-circuit',
-    title: 'Agentes de IA',
-    description: 'IA aplicada ao trabalho real, conectada a dados, ferramentas e regras da operação.',
-    tags: ['LLMs', 'RAG', 'Ferramentas', 'OpenAI']
-  },
-  {
-    icon: 'lucide:app-window',
-    title: 'Soluções digitais',
-    description: 'Aplicações empresariais modulares, preparadas para crescer sem perder clareza.',
-    tags: ['Next.js', 'React', 'TypeScript', 'PostgreSQL']
-  }
-];
-
-export const projects = [
-  {
-    number: '01',
-    title: 'Dominus OS',
-    description: 'Centraliza cadastro, atendimento e regras de operação para times que usam CRM, ERP e IA no mesmo fluxo.',
-    tags: ['SaaS', 'CRM', 'ERP', 'IA']
-  },
-  {
-    number: '02',
-    title: 'Operação multicanal',
-    description: 'Conecta ERP, marketplaces e canais de atendimento para sincronizar pedidos, estoque e atualizações operacionais.',
-    tags: ['Integrações', 'Marketplaces', 'Automação']
-  },
-  {
-    number: '03',
-    title: 'Automação com IA',
-    description: 'Orquestra agentes com base de conhecimento, ferramentas e regras de aprovação para tarefas que exigem contexto.',
-    tags: ['Agentes', 'RAG', 'Fluxos']
-  },
-  {
-    number: '04',
-    title: 'Operações de atendimento',
-    description: 'Organiza triagem, roteamento e acompanhamento de demandas entre mensageria, CRM e rotinas internas.',
-    tags: ['Mensageria', 'CRM', 'Automação']
-  }
-];
 
 // Ícones monocromáticos na grade; a cor da marca aparece somente no hover.
 export const stack = [
+  { name: 'Python', icon: 'simple-icons:python', color: '#ffd43b' },
   { name: 'Next.js', icon: 'simple-icons:nextdotjs', color: '#e7eef2' },
   { name: 'React', icon: 'simple-icons:react', color: '#61dafb' },
   { name: 'TypeScript', icon: 'simple-icons:typescript', color: '#3178c6' },
-  { name: 'Node.js', icon: 'simple-icons:nodedotjs', color: '#83cd29' },
   { name: 'PostgreSQL', icon: 'simple-icons:postgresql', color: '#5d99c7' },
   { name: 'Supabase', icon: 'simple-icons:supabase', color: '#3ecf8e' },
   { name: 'Docker', icon: 'simple-icons:docker', color: '#2496ed' },

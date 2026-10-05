@@ -9,8 +9,17 @@ export default defineConfig({
   site: process.env.SITE_URL ?? 'https://guilhermefelex.github.io',
   base: repository && !isUserPage ? `/${repository}` : '/',
   output: 'static',
-  // Ícones são embutidos como SVG na build; o sitemap acompanha as páginas geradas.
-  integrations: [icon(), sitemap()],
+  // Português na raiz e inglês em /en/.
+  i18n: {
+    locales: ['pt', 'en'],
+    defaultLocale: 'pt',
+    routing: { prefixDefaultLocale: false }
+  },
+  // Ícones são embutidos como SVG na build; o sitemap liga as versões de cada idioma.
+  integrations: [
+    icon(),
+    sitemap({ i18n: { defaultLocale: 'pt', locales: { pt: 'pt-BR', en: 'en' } } })
+  ],
   build: {
     assets: '_assets'
   }

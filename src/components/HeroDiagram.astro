@@ -3,23 +3,33 @@
  * Diagrama do hero: entradas da operação passam pela orquestração com IA e chegam às saídas.
  * Pontos em movimento usam SMIL (animateMotion); com menos movimento eles são pausados e ocultados.
  */
-const inputs = [
-  { label: 'ERP', y: 70, path: 'M148 92 C 204 92, 210 220, 238 220' },
-  { label: 'Marketplaces', y: 198, path: 'M148 220 H 238' },
-  { label: 'Mensageria', y: 326, path: 'M148 348 C 204 348, 210 220, 238 220' }
+import { content } from '../i18n/content';
+import type { Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+
+const { diagram } = content[Astro.props.lang];
+const inputPositions = [
+  { y: 70, path: 'M148 92 C 204 92, 210 220, 238 220' },
+  { y: 198, path: 'M148 220 H 238' },
+  { y: 326, path: 'M148 348 C 204 348, 210 220, 238 220' }
 ];
-const outputs = [
-  { label: 'CRM', y: 112, path: 'M362 220 C 394 220, 396 134, 420 134' },
-  { label: 'Painéis', y: 284, path: 'M362 220 C 394 220, 396 306, 420 306' }
+const outputPositions = [
+  { y: 112, path: 'M362 220 C 388 220, 390 134, 408 134' },
+  { y: 284, path: 'M362 220 C 388 220, 390 306, 408 306' }
 ];
+const inputs = inputPositions.map((node, index) => ({ ...node, label: diagram.inputNodes[index] }));
+const outputs = outputPositions.map((node, index) => ({ ...node, label: diagram.outputNodes[index] }));
 const flows = [...inputs, ...outputs];
 ---
 
-<figure class="hero-diagram" aria-label="Diagrama: ERP, marketplaces e mensageria conectados por orquestração com IA a CRM e painéis">
+<figure class="hero-diagram" aria-label={diagram.label}>
   <svg viewBox="0 0 540 440" aria-hidden="true" focusable="false">
-    <text class="diagram-caption" x="8" y="34">entradas</text>
-    <text class="diagram-caption" x="300" y="34" text-anchor="middle">orquestração</text>
-    <text class="diagram-caption" x="532" y="34" text-anchor="end">saídas</text>
+    <text class="diagram-caption" x="8" y="34">{diagram.inputs}</text>
+    <text class="diagram-caption" x="300" y="34" text-anchor="middle">{diagram.orchestration}</text>
+    <text class="diagram-caption" x="532" y="34" text-anchor="end">{diagram.outputs}</text>
 
     {flows.map((flow) => <path class="diagram-wire" d={flow.path} />)}
     {flows.map((flow) => <path class="diagram-flow" d={flow.path} />)}
@@ -42,19 +52,19 @@ const flows = [...inputs, ...outputs];
       <circle class="diagram-ring" cx="300" cy="220" r="84" />
       <circle class="diagram-halo" cx="300" cy="220" r="68" />
       <circle class="diagram-center" cx="300" cy="220" r="58" />
-      <text class="diagram-core-title" x="300" y="218" text-anchor="middle">IA</text>
-      <text class="diagram-core-sub" x="300" y="242" text-anchor="middle">n8n · agentes</text>
+      <text class="diagram-core-title" x="300" y="218" text-anchor="middle">{diagram.core}</text>
+      <text class="diagram-core-sub" x="300" y="242" text-anchor="middle">{diagram.coreSub}</text>
     </g>
 
     {outputs.map((node) => (
       <g class="diagram-node diagram-node-out">
-        <rect x="420" y={node.y} width="112" height="44" rx="6" />
-        <circle class="diagram-status" cx="438" cy={node.y + 22} r="3" />
-        <text x="450" y={node.y + 26}>{node.label}</text>
+        <rect x="408" y={node.y} width="124" height="44" rx="6" />
+        <circle class="diagram-status" cx="424" cy={node.y + 22} r="3" />
+        <text x="436" y={node.y + 26}>{node.label}</text>
       </g>
     ))}
 
-    <text class="diagram-caption diagram-footnote" x="300" y="418" text-anchor="middle">regras · aprovação · rastreabilidade</text>
+    <text class="diagram-caption diagram-footnote" x="300" y="418" text-anchor="middle">{diagram.footnote}</text>
   </svg>
 </figure>
 

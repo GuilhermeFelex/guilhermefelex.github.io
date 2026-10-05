@@ -17,7 +17,10 @@
   .expertise-item:nth-child(-n + 2) { border-bottom: 1px solid var(--line); }
   .expertise-item p, .project-item > p { font-size: 15px; }
   .project-list { grid-template-columns: repeat(2, 1fr); }
-  .project-item { min-height: 320px; }
+  .career-item { grid-template-columns: 130px minmax(0, 1fr); gap: 10px 24px; }
+  .career-description { grid-column: 2; }
+  .career-extra { grid-template-columns: 1fr; gap: 28px; }
+  .process-list { grid-template-columns: repeat(2, 1fr); }
   .stack-list { grid-template-columns: repeat(3, 1fr); }
   .stack-list li:nth-child(3n) { border-right: 0; }
   .stack-list li:nth-child(-n + 9) { border-bottom: 1px solid var(--line); }
@@ -41,7 +44,8 @@
   :root { --header-h: 76px; }
   body.nav-open { overflow: hidden; }
   .site-header { padding-inline: 0; }
-  .menu-button { display: inline-flex; align-items: center; gap: 12px; min-height: 44px; padding: 10px 0; }
+  .menu-button { display: inline-flex; order: 2; align-items: center; gap: 12px; min-height: 44px; padding: 10px 0; }
+  .lang-switch { order: 1; min-height: 36px; margin-right: 18px; margin-left: auto; }
   .menu-icon, .menu-icon::after { display: block; width: 18px; height: 1px; background: currentColor; content: ''; transition: transform .2s ease; }
   .menu-icon::after { transform: translateY(5px); }
   .menu-open .menu-icon { transform: rotate(45deg); }
@@ -70,12 +74,16 @@
   .expertise-list { grid-template-columns: 1fr; }
   .expertise-item, .expertise-item:nth-child(2) { min-height: 0; border-right: 0; border-bottom: 1px solid var(--line); }
   .expertise-item:last-child { border-bottom: 0; }
-  .projects-intro h2, .about-lead, .stack-title { font-size: clamp(2rem, 10vw, 3rem); }
+  .projects-intro h2, .about-lead, .career-title, .stack-title { font-size: clamp(2rem, 10vw, 3rem); }
   .project-list { grid-template-columns: 1fr; }
-  .project-item { min-height: 0; padding: 24px; }
-  .project-heading { min-height: 0; }
-  .project-heading h3 { margin: 20px 0; }
-  .project-item > p { margin-bottom: 20px; font-size: 14px; }
+  .project-item { padding: 24px; }
+  .project-item h3 { margin: 20px 0 10px; }
+  .project-item > p { font-size: 14px; }
+  .career-item { grid-template-columns: 1fr; gap: 6px; padding: 24px 0; }
+  .career-description { grid-column: auto; margin-top: 4px; }
+  .process-list { grid-template-columns: 1fr; }
+  .process-list li { padding-right: 0; padding-bottom: 18px; border-bottom: 1px solid var(--line); }
+  .contact-paths { grid-template-columns: 1fr; }
   .stack-list { grid-template-columns: repeat(2, 1fr); }
   .stack-list li, .stack-list li:nth-child(3n) { border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
   .stack-list li:nth-child(even) { border-right: 0; }
