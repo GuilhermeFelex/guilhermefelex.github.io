@@ -15,6 +15,7 @@ const root = process.cwd();
 const baseUrl = process.env.A11Y_BASE_URL ?? 'http://127.0.0.1:4331';
 const startsServer = !process.env.A11Y_BASE_URL;
 const pages = ['/', '/en/'];
+const utilityPages = ['/cv/', '/en/cv/', '/pagina-que-nao-existe'];
 const tags = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'];
 
 /** Espera o servidor responder antes de abrir o navegador. */
@@ -88,11 +89,22 @@ try {
     console.log(`${pagePath}: ${desktopResult.passes.length} regras aprovadas no desktop.`);
   }
 
+  // Páginas utilitárias (currículo e 404): sem menu, só a verificação de desktop.
+  for (const pagePath of utilityPages) {
+    const context = await browser.newContext({ viewport: { width: 1440, height: 900 }, reducedMotion: 'reduce' });
+    const page = await context.newPage();
+    await page.goto(new URL(pagePath, baseUrl).href, { waitUntil: 'networkidle' });
+    const result = await new AxeBuilder({ page }).withTags(tags).analyze();
+    failures.push(...describe(result.violations).map((line) => `${pagePath}: ${line}`));
+    await context.close();
+    console.log(`${pagePath}: ${result.passes.length} regras aprovadas.`);
+  }
+
   if (failures.length) {
     throw new Error(`Auditoria de acessibilidade falhou:\n- ${failures.join('\n- ')}`);
   }
 
-  console.log(`Acessibilidade aprovada (axe, ${tags.join(', ')}): ${pages.join(', ')}.`);
+  console.log(`Acessibilidade aprovada (axe, ${tags.join(', ')}): ${[...pages, ...utilityPages].join(', ')}.`);
 } finally {
   await browser?.close();
   server?.kill();

@@ -6,7 +6,8 @@ export const site = {
   fullName: 'Guilherme Felex',
   // Marca comercial: o site vende os serviços da FelexTech; o nome pessoal aparece como fundador.
   brand: 'FelexTech',
-  email: 'guilherme.felex@hotmail.com',
+  // Separado em partes: o endereço completo só é montado no navegador (src/scripts/email.ts).
+  email: { user: 'guilherme.felex', domain: 'hotmail.com' },
   social: {
     github: 'https://github.com/GuilhermeFelex',
     linkedin: 'https://www.linkedin.com/in/guilhermefelex/',
@@ -30,7 +31,7 @@ export const stack = [
   { name: 'Docker', icon: 'simple-icons:docker', color: '#2496ed' },
   { name: 'n8n', icon: 'simple-icons:n8n', color: '#ea4b71' },
   { name: 'OpenAI', icon: 'simple-icons:openai', color: '#e7eef2' },
-  { name: 'UiPath', icon: 'simple-icons:uipath', color: '#fa4616' },
+  { name: 'UiPath', icon: 'uipath', color: '#fa4616' },
   { name: 'Power Platform', icon: 'power-platform', color: '#2fb5a0' },
   { name: 'AWS', icon: 'simple-icons:amazonwebservices', color: '#ff9900' }
 ];

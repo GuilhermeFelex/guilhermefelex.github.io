@@ -14,3 +14,13 @@ export const defaultLang: Lang = 'pt';
 export const homeUrl = (lang: Lang) => getRelativeLocaleUrl(lang);
 
 export const otherLang = (lang: Lang): Lang => (lang === 'pt' ? 'en' : 'pt');
+
+const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
+
+/** PDF do currículo gerado na build por scripts/build-cv.mjs a partir das páginas /cv/ e /en/cv/. */
+export const cvFiles: Record<Lang, string> = {
+  pt: 'curriculo-guilherme-felex.pdf',
+  en: 'en/resume-guilherme-felex.pdf'
+};
+
+export const cvUrl = (lang: Lang) => `${base}${cvFiles[lang]}`;

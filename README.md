@@ -25,10 +25,11 @@ Abra `http://localhost:4321` no navegador.
 | Comando | O que faz |
 | --- | --- |
 | `npm run dev` | Inicia o ambiente de desenvolvimento com atualização automática. |
-| `npm run build` | Valida TypeScript/Astro e gera a versão de produção em `dist/`. |
+| `npm run build` | Valida TypeScript/Astro, gera a versão de produção em `dist/` e o currículo em PDF (precisa do Chrome instalado). |
 | `npm run preview` | Abre localmente a versão gerada pelo build. |
 | `npm run validate:responsive` | Testa os breakpoints das duas versões no Chrome e salva screenshots em `artifacts/responsive/`. |
-| `npm run validate:a11y` | Audita acessibilidade (axe, WCAG 2.1 AA) na build, incluindo o menu móvel aberto. Rode `npm run build` antes. |
+| `npm run validate:a11y` | Audita acessibilidade (axe, WCAG 2.1 AA) na build, incluindo o menu móvel aberto, o currículo e a 404. Rode `npm run build` antes. |
+| `npm run validate:site` | Confere conteúdo, SEO e comportamento na build: marca, e-mail oculto, dados estruturados, 404, manifest, currículo e botão de copiar. |
 | `npm run lighthouse` | Roda o Lighthouse CI sobre `dist/` e salva os relatórios em `artifacts/lighthouse/`. |
 
 ## Estrutura do projeto
@@ -38,12 +39,13 @@ brand/                # Kit de marca completo e arquivos legados (fora do deploy
 public/               # Somente o que o site publica: favicons, imagem OG e robots.txt
 src/
 ├── assets/brand/     # Imagens otimizadas na build (astro:assets)
-├── components/       # Home (página completa), Header, HeroDiagram, SectionTitle e Analytics
+├── components/       # Home (página completa), Resume (currículo), Header, HeroDiagram, SectionTitle e Analytics
 ├── icons/            # Ícones SVG locais usados pelo astro-icon (ex.: power-platform)
 ├── data/site.ts      # Dados sem idioma: email, redes, stack (ícone + cor) e analytics
 ├── i18n/             # Textos em português e inglês (content.ts) e utilidades de idioma (ui.ts)
 ├── layouts/          # Estrutura HTML compartilhada e metadados
-├── pages/            # index.astro (português, /) e en/index.astro (inglês, /en/)
+├── pages/            # index e cv em português (/ e /cv/), em inglês (/en/ e /en/cv/) e a 404 bilíngue
+├── scripts/email.ts  # Monta o e-mail no navegador (o endereço completo não fica no HTML)
 └── styles/           # Estilos separados por responsabilidade
     ├── tokens.css    # Cores, fontes, espaçamentos e variáveis globais
     ├── base.css      # Reset, acessibilidade e animações compartilhadas
@@ -53,14 +55,17 @@ src/
 
 scripts/
 ├── validate-responsive.mjs # Validação automática dos breakpoints no navegador
-└── validate-a11y.mjs       # Auditoria de acessibilidade com axe-core
+├── validate-a11y.mjs       # Auditoria de acessibilidade com axe-core (inclui currículo e 404)
+├── validate-site.mjs       # Verificações de conteúdo, SEO e comportamento
+├── build-cv.mjs            # Gera o currículo em PDF a partir de /cv/ e /en/cv/ depois da build
+└── generate-og-en.mjs      # Refaz a imagem de compartilhamento em inglês (uso manual)
 ```
 
 O arquivo `src/styles/global.css` é somente o ponto de entrada que importa os módulos na ordem correta.
 
 ## Qualidade
 
-A cada push na `main` (e em PRs para ela), o workflow gera a build e roda acessibilidade (axe), validação responsiva e Lighthouse antes de publicar. O deploy só acontece se tudo passar. Os relatórios ficam disponíveis como artefato `quality-reports` na execução do workflow. O Lighthouse exige nota mínima de 95 em acessibilidade e SEO e de 90 em boas práticas; desempenho abaixo de 90 gera apenas aviso.
+A cada push na `main` (e em PRs para ela), o workflow gera a build (com o currículo em PDF) e roda acessibilidade (axe), a validação de conteúdo (`validate:site`), a validação responsiva e o Lighthouse antes de publicar. O Dependabot abre PRs semanais de atualização, que passam pelas mesmas verificações. O deploy só acontece se tudo passar. Os relatórios ficam disponíveis como artefato `quality-reports` na execução do workflow. O Lighthouse exige nota mínima de 95 em acessibilidade e SEO e de 90 em boas práticas; desempenho abaixo de 90 gera apenas aviso.
 
 ## Validação responsiva
 

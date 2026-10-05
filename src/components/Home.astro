@@ -9,7 +9,7 @@ import HeroDiagram from './HeroDiagram.astro';
 import SectionTitle from './SectionTitle.astro';
 import { site, stack } from '../data/site';
 import { content } from '../i18n/content';
-import type { Lang } from '../i18n/ui';
+import { cvUrl, type Lang } from '../i18n/ui';
 
 interface Props {
   lang: Lang;
@@ -168,6 +168,8 @@ const year = new Date().getFullYear();
             <ul>
               {t.career.education.map((entry) => <li>{entry}</li>)}
             </ul>
+            <h3 class="career-subhead">{t.career.languagesLabel}</h3>
+            <p class="career-languages">{t.career.languages}</p>
           </div>
           <div>
             <h3>{t.career.certificationsLabel}</h3>
@@ -176,24 +178,27 @@ const year = new Date().getFullYear();
             </ul>
           </div>
         </div>
-        <a class="career-linkedin reveal" href={site.social.linkedin} target="_blank" rel="noreferrer" data-goatcounter-click="trajetoria-linkedin">
-          {t.career.linkedinCta} <span aria-hidden="true">↗</span>
-        </a>
-      </section>
-
-      <section class="stack section" id="stack" aria-labelledby="stack-title">
-        <SectionTitle number="05" label={t.stack.label} />
-        <h2 id="stack-title" class="stack-title reveal">
-          {t.stack.titleStart} <span>{t.stack.titleAccent}</span>
-        </h2>
-        <ul class="stack-list reveal">
-          {stack.map((technology) => (
-            <li style={`--brand: ${technology.color}`}>
-              <Icon name={technology.icon} class="stack-mark" aria-hidden="true" />
-              {technology.name}
-            </li>
-          ))}
-        </ul>
+        <!-- Stack compacta: as tags de serviços e casos já detalham as ferramentas. -->
+        <div class="career-stack reveal">
+          <h3>{t.stack.label}</h3>
+          <ul class="stack-chips">
+            {stack.map((technology) => (
+              <li style={`--brand: ${technology.color}`}>
+                <Icon name={technology.icon} class="stack-chip-icon" aria-hidden="true" />
+                {technology.name}
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div class="career-links reveal">
+          <a class="career-cv" href={cvUrl(lang)} download data-goatcounter-click="trajetoria-curriculo">
+            <Icon name="lucide:file-down" aria-hidden="true" />
+            {t.career.cvCta}
+          </a>
+          <a class="career-linkedin" href={site.social.linkedin} target="_blank" rel="noreferrer" data-goatcounter-click="trajetoria-linkedin">
+            {t.career.linkedinCta} <span aria-hidden="true">↗</span>
+          </a>
+        </div>
       </section>
 
       <section class="contact section" id="contato" aria-labelledby="contact-title">
@@ -210,7 +215,10 @@ const year = new Date().getFullYear();
             <p>{t.contact.clients.text}</p>
             <a
               class="contact-link"
-              href={`mailto:${site.email}?subject=${encodeURIComponent(t.contact.clients.subject)}`}
+              href="#contato"
+              data-mail-user={site.email.user}
+              data-mail-domain={site.email.domain}
+              data-mail-subject={t.contact.clients.subject}
               data-goatcounter-click="contato-projeto"
             >
               {t.contact.clients.cta}
@@ -225,26 +233,46 @@ const year = new Date().getFullYear();
               {t.contact.recruiters.cta}
               <span aria-hidden="true">↗</span>
             </a>
-            <a
-              class="contact-text-link"
-              href={`mailto:${site.email}?subject=${encodeURIComponent(t.contact.recruiters.subject)}`}
-              data-goatcounter-click="contato-oportunidade"
-            >
-              {t.contact.recruiters.emailCta} <span aria-hidden="true">→</span>
-            </a>
+            <div class="contact-text-links">
+              <a class="contact-text-link" href={cvUrl(lang)} download data-goatcounter-click="contato-curriculo">
+                {t.career.cvCta} <span aria-hidden="true">↓</span>
+              </a>
+              <a
+                class="contact-text-link"
+                href="#contato"
+                data-mail-user={site.email.user}
+                data-mail-domain={site.email.domain}
+                data-mail-subject={t.contact.recruiters.subject}
+                data-goatcounter-click="contato-oportunidade"
+              >
+                {t.contact.recruiters.emailCta} <span aria-hidden="true">→</span>
+              </a>
+            </div>
           </div>
         </div>
         <div class="contact-bottom reveal">
           <div class="contact-actions">
             <div class="contact-email-row">
-              <a class="contact-email" href={`mailto:${site.email}`}>{site.email}</a>
+              <!-- O endereço é montado no navegador; sem JS fica a forma legível com "[arroba]". -->
+              <a
+                class="contact-email"
+                href="#contato"
+                data-mail-user={site.email.user}
+                data-mail-domain={site.email.domain}
+                data-mail-text
+                data-copy-target
+              >{t.contact.emailFallback}</a>
               <!-- Nem todo visitante tem um app de email configurado para abrir o mailto. -->
               <button
                 class="copy-email"
                 type="button"
-                data-copy={site.email}
+                data-copy
+                data-mail-user={site.email.user}
+                data-mail-domain={site.email.domain}
                 data-copied={t.contact.copied}
                 data-copied-status={t.contact.copiedStatus}
+                data-copy-failed={t.contact.copyFailed}
+                data-copy-failed-status={t.contact.copyFailedStatus}
                 data-goatcounter-click="contato-copiar-email"
               >
                 <Icon name="lucide:copy" aria-hidden="true" />
@@ -260,7 +288,7 @@ const year = new Date().getFullYear();
 
     <footer class="site-footer">
       <div class="footer-brand">
-        <strong>FELEX</strong>
+        <strong>{site.brand}</strong>
         <span>© {year} {site.brand} · {t.footer.slogan}</span>
       </div>
       <div class="footer-links">
@@ -273,6 +301,8 @@ const year = new Date().getFullYear();
   </div>
 
   <script>
+    import { hydrateEmail } from '../scripts/email';
+
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const elements = document.querySelectorAll<HTMLElement>('.reveal');
 
@@ -294,28 +324,38 @@ const year = new Date().getFullYear();
       elements.forEach((element) => observer.observe(element));
     }
 
+    hydrateEmail();
+
     // Copia o email e confirma visualmente e para leitores de tela; os textos vêm do idioma da página.
     const copyButton = document.querySelector<HTMLButtonElement>('[data-copy]');
     const copyLabel = copyButton?.querySelector<HTMLElement>('[data-copy-label]');
     const copyStatus = document.querySelector<HTMLElement>('[data-copy-status]');
+    const copyTarget = document.querySelector<HTMLElement>('[data-copy-target]');
     const defaultLabel = copyLabel?.textContent ?? '';
     let resetLabel: number | undefined;
+
+    const showCopyState = (state: 'is-copied' | 'is-failed', label: string, status: string) => {
+      copyButton?.classList.remove('is-copied', 'is-failed');
+      copyButton?.classList.add(state);
+      if (copyLabel) copyLabel.textContent = label;
+      if (copyStatus) copyStatus.textContent = status;
+      window.clearTimeout(resetLabel);
+      resetLabel = window.setTimeout(() => {
+        copyButton?.classList.remove(state);
+        if (copyLabel) copyLabel.textContent = defaultLabel;
+        if (copyStatus) copyStatus.textContent = '';
+      }, 4000);
+    };
 
     copyButton?.addEventListener('click', async () => {
       try {
         await navigator.clipboard.writeText(copyButton.dataset.copy ?? '');
+        showCopyState('is-copied', copyButton.dataset.copied ?? '', copyButton.dataset.copiedStatus ?? '');
       } catch {
-        return;
+        // Sem permissão de área de transferência: seleciona o endereço para o visitante copiar manualmente.
+        if (copyTarget) window.getSelection()?.selectAllChildren(copyTarget);
+        showCopyState('is-failed', copyButton.dataset.copyFailed ?? '', copyButton.dataset.copyFailedStatus ?? '');
       }
-      copyButton.classList.add('is-copied');
-      if (copyLabel) copyLabel.textContent = copyButton.dataset.copied ?? '';
-      if (copyStatus) copyStatus.textContent = copyButton.dataset.copiedStatus ?? '';
-      window.clearTimeout(resetLabel);
-      resetLabel = window.setTimeout(() => {
-        copyButton.classList.remove('is-copied');
-        if (copyLabel) copyLabel.textContent = defaultLabel;
-        if (copyStatus) copyStatus.textContent = '';
-      }, 2200);
     });
   </script>
 </BaseLayout>

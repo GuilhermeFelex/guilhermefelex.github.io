@@ -6,6 +6,8 @@
   --ink: #e9f0f4;
   --text: #e9f0f4;
   --muted: #aabac5;
+  /* Texto de leitura (descrições): mais claro que --muted, que fica para rótulos. */
+  --text-soft: #c9d6dd;
   --line: rgba(168, 197, 211, .17);
   --accent: #6ecbff;
   --accent-deep: #11384d;

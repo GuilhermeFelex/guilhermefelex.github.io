@@ -11,10 +11,17 @@ import { homeUrl, languages, otherLang, type Lang } from '../i18n/ui';
 
 interface Props {
   lang: Lang;
+  /** Título e descrição próprios (ex.: página 404); por padrão, os da página inicial. */
+  title?: string;
+  description?: string;
+  /** Páginas utilitárias (404, currículo) ficam fora das buscas e sem versões alternativas. */
+  noindex?: boolean;
 }
 
-const { lang } = Astro.props;
-const { meta } = content[lang];
+const { lang, noindex = false } = Astro.props;
+const t = content[lang];
+const title = Astro.props.title ?? t.meta.title;
+const description = Astro.props.description ?? t.meta.description;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const home = new URL(homeUrl('pt'), Astro.site);
 const alternate = otherLang(lang);
@@ -22,35 +29,57 @@ const basePath = import.meta.env.BASE_URL.endsWith('/')
   ? import.meta.env.BASE_URL
   : `${import.meta.env.BASE_URL}/`;
 // A imagem usa URL absoluta porque LinkedIn, WhatsApp e outros crawlers não resolvem caminhos relativos.
-const socialImage = new URL(`${basePath}images/og-felex.jpg`, Astro.site);
-// Dados estruturados conectam a pessoa, o nome curto "Felex" e a marca FelexTech nas buscas.
+const socialImage = new URL(`${basePath}images/${lang === 'en' ? 'og-felex-en.jpg' : 'og-felex.jpg'}`, Astro.site);
+
+// Dados estruturados: a pessoa, a marca como prestadora de serviços e o catálogo de serviços do idioma.
+// O email fica de fora de propósito: ele só é montado no navegador (src/scripts/email.ts).
+const personId = `${home.href}#guilherme-felex`;
+const brandId = `${home.href}#felextech`;
 const profileSchema = JSON.stringify({
   '@context': 'https://schema.org',
   '@graph': [
     {
       '@type': 'Person',
-      '@id': `${home.href}#guilherme-felex`,
+      '@id': personId,
       name: site.fullName,
       alternateName: site.name,
-      jobTitle: meta.role,
+      jobTitle: t.meta.role,
       url: home.href,
-      email: site.email,
-      address: {
-        '@type': 'PostalAddress',
-        addressLocality: 'São Paulo',
-        addressCountry: 'BR'
-      },
+      address: { '@type': 'PostalAddress', addressLocality: 'São Paulo', addressCountry: 'BR' },
+      alumniOf: t.career.education.map((entry) => ({
+        '@type': 'EducationalOrganization',
+        name: entry.split(' — ')[1]?.split(',')[0] ?? entry
+      })),
+      knowsAbout: [...new Set(t.services.items.flatMap((item) => item.tags))],
+      knowsLanguage: ['pt-BR', 'en', 'es'],
       sameAs: [site.social.github, site.social.linkedin].filter(Boolean),
-      worksFor: { '@id': `${home.href}#felextech` }
+      worksFor: { '@id': brandId }
     },
     {
-      '@type': 'Organization',
-      '@id': `${home.href}#felextech`,
+      '@type': 'ProfessionalService',
+      '@id': brandId,
       name: site.brand,
       alternateName: site.name,
-      url: home.href,
-      founder: { '@id': `${home.href}#guilherme-felex` },
-      sameAs: [site.social.instagram].filter(Boolean)
+      description: t.services.intro,
+      url: new URL(homeUrl(lang), Astro.site).href,
+      image: socialImage.href,
+      founder: { '@id': personId },
+      address: { '@type': 'PostalAddress', addressLocality: 'São Paulo', addressRegion: 'SP', addressCountry: 'BR' },
+      areaServed: { '@type': 'Country', name: 'Brasil' },
+      sameAs: [site.social.instagram].filter(Boolean),
+      hasOfferCatalog: {
+        '@type': 'OfferCatalog',
+        name: t.services.label,
+        itemListElement: t.services.items.map((item) => ({
+          '@type': 'Offer',
+          itemOffered: {
+            '@type': 'Service',
+            name: item.title,
+            description: item.description,
+            provider: { '@id': brandId }
+          }
+        }))
+      }
     }
   ]
 });
@@ -61,42 +90,49 @@ const profileSchema = JSON.stringify({
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content={meta.description} />
+    <meta name="description" content={description} />
     <meta name="theme-color" content="#071015" />
     <meta name="color-scheme" content="dark" />
-    <link rel="canonical" href={canonical} />
-    <!-- Versões por idioma: os buscadores mostram a página certa para cada público. -->
-    {Object.entries(languages).map(([code, language]) => (
-      <link rel="alternate" hreflang={language.htmlLang} href={new URL(homeUrl(code as Lang), Astro.site)} />
-    ))}
-    <link rel="alternate" hreflang="x-default" href={home} />
-    <!-- F branco do kit v6 (cópias em public/favicons) para abas e atalhos. -->
+    {noindex ? (
+      <meta name="robots" content="noindex" />
+    ) : (
+      <>
+        <link rel="canonical" href={canonical} />
+        {/* Versões por idioma: os buscadores mostram a página certa para cada público. */}
+        {Object.entries(languages).map(([code, language]) => (
+          <link rel="alternate" hreflang={language.htmlLang} href={new URL(homeUrl(code as Lang), Astro.site)} />
+        ))}
+        <link rel="alternate" hreflang="x-default" href={home} />
+      </>
+    )}
+    <!-- F branco do kit v6 (cópias em public/favicons) para abas; ícones com fundo escuro para a tela inicial. -->
     <link rel="icon" href={`${basePath}favicons/favicon.ico`} sizes="any" />
     <link rel="icon" href={`${basePath}favicons/favicon_32.png`} type="image/png" sizes="32x32" />
     <link rel="icon" href={`${basePath}favicons/favicon_16.png`} type="image/png" sizes="16x16" />
-    <link rel="apple-touch-icon" href={`${basePath}favicons/favicon_180.png`} sizes="180x180" />
+    <link rel="apple-touch-icon" href={`${basePath}favicons/apple-touch-icon.png`} sizes="180x180" />
+    <link rel="manifest" href={`${basePath}site.webmanifest`} />
     <!-- Metadados usados para criar uma prévia consistente ao compartilhar o portfólio. -->
     <meta property="og:type" content="website" />
     <meta property="og:locale" content={languages[lang].ogLocale} />
     <meta property="og:locale:alternate" content={languages[alternate].ogLocale} />
     <meta property="og:site_name" content={site.brand} />
-    <meta property="og:title" content={meta.title} />
-    <meta property="og:description" content={meta.description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={socialImage} />
-    <meta property="og:image:alt" content={meta.imageAlt} />
+    <meta property="og:image:alt" content={t.meta.imageAlt} />
     <meta property="og:image:width" content="1730" />
     <meta property="og:image:height" content="909" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={meta.title} />
-    <meta name="twitter:description" content={meta.description} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={socialImage} />
-    <meta name="twitter:image:alt" content={meta.imageAlt} />
-    <script type="application/ld+json" set:html={profileSchema}></script>
+    <meta name="twitter:image:alt" content={t.meta.imageAlt} />
+    {!noindex && <script type="application/ld+json" set:html={profileSchema}></script>}
     <!-- Marca a página como "com JS" antes da pintura; sem JS, os blocos .reveal ficam visíveis. -->
     <script is:inline>document.documentElement.classList.add('js');</script>
     <Analytics />
-    <title>{meta.title}</title>
+    <title>{title}</title>
   </head>
   <body>
     <slot />

@@ -13,17 +13,12 @@
   .about-grid, .projects-intro, .contact-bottom { grid-template-columns: 1fr; }
   .about-grid { gap: 30px; }
   .expertise-list { grid-template-columns: repeat(2, 1fr); }
-  .expertise-item:nth-child(2) { border-right: 0; }
-  .expertise-item:nth-child(-n + 2) { border-bottom: 1px solid var(--line); }
-  .expertise-item p, .project-item > p { font-size: 15px; }
   .project-list { grid-template-columns: repeat(2, 1fr); }
   .career-item { grid-template-columns: 130px minmax(0, 1fr); gap: 10px 24px; }
   .career-description { grid-column: 2; }
   .career-extra { grid-template-columns: 1fr; gap: 28px; }
   .process-list { grid-template-columns: repeat(2, 1fr); }
-  .stack-list { grid-template-columns: repeat(3, 1fr); }
-  .stack-list li:nth-child(3n) { border-right: 0; }
-  .stack-list li:nth-child(-n + 9) { border-bottom: 1px solid var(--line); }
+  .not-found-header, .not-found { padding-inline: 0; }
   .contact-title { margin: 42px 0; }
   .contact-bottom { gap: 32px; }
   .contact-actions { max-width: 420px; }
@@ -72,22 +67,21 @@
   .section { padding-block: 64px; }
   .section-title { grid-template-columns: 48px 1fr; margin-bottom: 34px; }
   .expertise-list { grid-template-columns: 1fr; }
-  .expertise-item, .expertise-item:nth-child(2) { min-height: 0; border-right: 0; border-bottom: 1px solid var(--line); }
-  .expertise-item:last-child { border-bottom: 0; }
-  .projects-intro h2, .about-lead, .career-title, .stack-title { font-size: clamp(2rem, 10vw, 3rem); }
+  .expertise-item { min-height: 0; padding: 24px 22px; }
+  .not-found-grid { grid-template-columns: 1fr; gap: 36px; }
+  .projects-intro h2, .about-lead { font-size: clamp(2rem, 10vw, 3rem); }
+  .career-title { font-size: clamp(1.7rem, 8vw, 2.3rem); }
   .project-list { grid-template-columns: 1fr; }
   .project-item { padding: 24px; }
   .project-item h3 { margin: 20px 0 10px; }
-  .project-item > p { font-size: 14px; }
+  .project-item > p { font-size: 15px; }
   .career-item { grid-template-columns: 1fr; gap: 6px; padding: 24px 0; }
   .career-description { grid-column: auto; margin-top: 4px; }
   .process-list { grid-template-columns: 1fr; }
-  .process-list li { padding-right: 0; padding-bottom: 18px; border-bottom: 1px solid var(--line); }
+  .process-list { border-top: 0; }
+  .process-list li { padding: 18px 0 18px 20px; border-left: 1px solid rgba(110, 203, 255, .35); }
+  .process-list li::before { top: 24px; left: -4px; }
   .contact-paths { grid-template-columns: 1fr; }
-  .stack-list { grid-template-columns: repeat(2, 1fr); }
-  .stack-list li, .stack-list li:nth-child(3n) { border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
-  .stack-list li:nth-child(even) { border-right: 0; }
-  .stack-list li:nth-last-child(-n + 2) { border-bottom: 0; }
   .contact { min-height: 420px; padding-block: 58px; }
   .contact-title { font-size: clamp(2.5rem, 13vw, 4rem); }
   .contact-bottom p { font-size: 16px; }

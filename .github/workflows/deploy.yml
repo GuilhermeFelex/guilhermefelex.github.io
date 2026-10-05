@@ -54,6 +54,11 @@ jobs:
         env:
           A11Y_BASE_URL: ${{ env.PREVIEW_URL }}
 
+      - name: Content, SEO and behaviour
+        run: npm run validate:site
+        env:
+          SITE_BASE_URL: ${{ env.PREVIEW_URL }}
+
       - name: Responsive layout
         run: npm run validate:responsive
         env:

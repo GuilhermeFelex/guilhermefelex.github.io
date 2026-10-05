@@ -18,7 +18,11 @@ export default defineConfig({
   // Ícones são embutidos como SVG na build; o sitemap liga as versões de cada idioma.
   integrations: [
     icon(),
-    sitemap({ i18n: { defaultLocale: 'pt', locales: { pt: 'pt-BR', en: 'en' } } })
+    sitemap({
+      i18n: { defaultLocale: 'pt', locales: { pt: 'pt-BR', en: 'en' } },
+      // O currículo (/cv/) e a 404 são páginas utilitárias, fora das buscas.
+      filter: (page) => !/\/(cv|404)\/?$/.test(new URL(page).pathname)
+    })
   ],
   build: {
     assets: '_assets'

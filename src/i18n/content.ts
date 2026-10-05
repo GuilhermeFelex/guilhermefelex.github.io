@@ -16,7 +16,7 @@ const pt = {
   },
   skipLink: 'Ir para o conteúdo',
   header: {
-    brandLabel: 'Felex — voltar ao início',
+    brandLabel: 'FelexTech — voltar ao início',
     menu: 'Menu',
     navLabel: 'Navegação principal',
     nav: { about: 'Sobre', services: 'Serviços', projects: 'Projetos', career: 'Trajetória', contact: 'Contato' },
@@ -25,20 +25,20 @@ const pt = {
   hero: {
     kicker: 'Integração · Automação · IA',
     location: 'São Paulo, Brasil',
-    titleStart: 'Eu construo sistemas que',
-    titleAccent: 'conectam, automatizam',
-    titleEnd: 'e pensam.',
+    titleStart: 'Automação e integrações que',
+    titleAccent: 'tiram o trabalho manual',
+    titleEnd: 'da sua operação.',
     lead: 'Pela FelexTech, ajudo empresas a conectar sistemas, automatizar rotinas e aplicar IA em processos que ainda dependem de trabalho manual. São mais de 4 anos fazendo isso em siderurgia, mineração, agronegócio e banco digital.',
     ctaPrimary: 'Ver serviços',
     ctaSecondary: 'Trajetória'
   },
   diagram: {
-    label: 'Diagrama: ERP, marketplaces e mensageria conectados por orquestração com IA a CRM e painéis',
+    label: 'Diagrama: ERP/SAP, planilhas e WhatsApp conectados por orquestração com n8n e IA a sistemas e painéis',
     inputs: 'entradas',
     orchestration: 'orquestração',
     outputs: 'saídas',
-    inputNodes: ['ERP', 'Marketplaces', 'Mensageria'],
-    outputNodes: ['CRM', 'Painéis'],
+    inputNodes: ['ERP / SAP', 'Planilhas', 'WhatsApp'],
+    outputNodes: ['Sistemas', 'Painéis'],
     core: 'IA',
     coreSub: 'n8n · agentes',
     footnote: 'regras · aprovação · rastreabilidade'
@@ -47,7 +47,7 @@ const pt = {
     label: 'Sobre',
     lead: 'Tecnologia só importa quando resolve o que está travando a operação.',
     introBefore: 'Sou ',
-    introAfter: ', desenvolvedor de automação e integrações há mais de 4 anos. Comecei liderando um programa de RPA na CSN, passei pela Biti9 e pelo Nubank e hoje sou Analista de Dados e Automação Sênior na Sigma Lithium, onde construo sistemas internos, integrações e a estratégia de IA da área.',
+    introAfter: ', desenvolvedor de automação e integrações há mais de 4 anos. Trabalho entre negócio e engenharia: conecto ERPs, planilhas, APIs e modelos de IA para tirar trabalho manual da operação, tanto em grandes empresas quanto em projetos pela FelexTech.',
     body: 'Meu trabalho começa entendendo o processo — mapeando, documentando e conversando com quem opera — e termina com uma solução em produção que as pessoas conseguem usar, manter e evoluir.'
   },
   services: {
@@ -193,12 +193,22 @@ const pt = {
     ],
     certificationsLabel: 'Certificações',
     certifications: ['UiPath RPA Developer', 'UiPath RPA Business Analyst', 'Power Platform Digital Belt', 'Scrum (Certiprof)'],
-    linkedinCta: 'Perfil completo no LinkedIn'
+    languagesLabel: 'Idiomas',
+    languages: 'Português nativo; inglês e espanhol do básico ao intermediário',
+    linkedinCta: 'Perfil completo no LinkedIn',
+    cvCta: 'Baixar currículo (PDF)'
   },
   stack: {
-    label: 'Stack atual',
-    titleStart: 'Ferramentas mudam.',
-    titleAccent: 'Critério permanece.'
+    label: 'Stack atual'
+  },
+  cv: {
+    title: 'Currículo — Guilherme Felex',
+    description: 'Currículo de Guilherme Felex: automação, integrações, sistemas internos e IA aplicada.',
+    summary: 'Resumo',
+    experience: 'Experiência',
+    projects: 'Projetos selecionados',
+    skills: 'Competências',
+    location: 'São Paulo, Brasil'
   },
   contact: {
     eyebrow: 'Disponível para projetos e oportunidades',
@@ -220,6 +230,9 @@ const pt = {
     copy: 'Copiar',
     copied: 'Copiado',
     copiedStatus: 'Email copiado para a área de transferência.',
+    copyFailed: 'Selecionado',
+    copyFailedStatus: 'Não foi possível copiar. O email ficou selecionado; use Ctrl+C.',
+    emailFallback: 'guilherme.felex [arroba] hotmail.com',
     remote: 'disponível para trabalho remoto'
   },
   footer: {
@@ -239,7 +252,7 @@ const en: Content = {
   },
   skipLink: 'Skip to content',
   header: {
-    brandLabel: 'Felex — back to top',
+    brandLabel: 'FelexTech — back to top',
     menu: 'Menu',
     navLabel: 'Main navigation',
     nav: { about: 'About', services: 'Services', projects: 'Projects', career: 'Career', contact: 'Contact' },
@@ -248,20 +261,20 @@ const en: Content = {
   hero: {
     kicker: 'Integration · Automation · AI',
     location: 'São Paulo, Brazil',
-    titleStart: 'I build systems that',
-    titleAccent: 'connect, automate',
-    titleEnd: 'and think.',
+    titleStart: 'Automation and integrations that',
+    titleAccent: 'take manual work',
+    titleEnd: 'out of your operations.',
     lead: 'Through FelexTech, I help companies connect systems, automate routines and apply AI to processes that still rely on manual work. I have been doing this for more than 4 years in steel, mining, agribusiness and digital banking.',
     ctaPrimary: 'See services',
     ctaSecondary: 'Career'
   },
   diagram: {
-    label: 'Diagram: ERP, marketplaces and messaging connected through AI orchestration to CRM and dashboards',
+    label: 'Diagram: ERP/SAP, spreadsheets and WhatsApp connected through n8n and AI orchestration to systems and dashboards',
     inputs: 'inputs',
     orchestration: 'orchestration',
     outputs: 'outputs',
-    inputNodes: ['ERP', 'Marketplaces', 'Messaging'],
-    outputNodes: ['CRM', 'Dashboards'],
+    inputNodes: ['ERP / SAP', 'Spreadsheets', 'WhatsApp'],
+    outputNodes: ['Systems', 'Dashboards'],
     core: 'AI',
     coreSub: 'n8n · agents',
     footnote: 'rules · approval · traceability'
@@ -270,7 +283,7 @@ const en: Content = {
     label: 'About',
     lead: 'Technology only matters when it unblocks the operation.',
     introBefore: "I'm ",
-    introAfter: ', an automation and integration developer with more than 4 years of experience. I started by leading an RPA program at CSN, worked at Biti9 and Nubank, and today I am a Senior Data and Automation Analyst at Sigma Lithium, where I build internal systems, integrations and the team’s AI strategy.',
+    introAfter: ', an automation and integration developer with more than 4 years of experience. I work between business and engineering: I connect ERPs, spreadsheets, APIs and AI models to take manual work out of operations, both at large companies and in FelexTech projects.',
     body: 'My work starts by understanding the process — mapping it, documenting it and talking to the people who run it — and ends with a production solution people can actually use, maintain and evolve.'
   },
   services: {
@@ -416,12 +429,22 @@ const en: Content = {
     ],
     certificationsLabel: 'Certifications',
     certifications: ['UiPath RPA Developer', 'UiPath RPA Business Analyst', 'Power Platform Digital Belt', 'Scrum (Certiprof)'],
-    linkedinCta: 'Full profile on LinkedIn'
+    languagesLabel: 'Languages',
+    languages: 'Native Portuguese; English and Spanish from basic to intermediate',
+    linkedinCta: 'Full profile on LinkedIn',
+    cvCta: 'Download résumé (PDF)'
   },
   stack: {
-    label: 'Current stack',
-    titleStart: 'Tools change.',
-    titleAccent: 'Judgment stays.'
+    label: 'Current stack'
+  },
+  cv: {
+    title: 'Résumé — Guilherme Felex',
+    description: 'Résumé of Guilherme Felex: automation, integrations, internal systems and applied AI.',
+    summary: 'Summary',
+    experience: 'Experience',
+    projects: 'Selected projects',
+    skills: 'Skills',
+    location: 'São Paulo, Brazil'
   },
   contact: {
     eyebrow: 'Available for projects and opportunities',
@@ -443,6 +466,9 @@ const en: Content = {
     copy: 'Copy',
     copied: 'Copied',
     copiedStatus: 'Email copied to clipboard.',
+    copyFailed: 'Selected',
+    copyFailedStatus: 'Could not copy. The email is selected; press Ctrl+C.',
+    emailFallback: 'guilherme.felex [at] hotmail.com',
     remote: 'available for remote work'
   },
   footer: {
