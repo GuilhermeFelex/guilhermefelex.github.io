@@ -1,4 +1,8 @@
 ---
+// Fontes servidas pelo próprio site: sem requisições externas nem bloqueio do Google Fonts.
+import '@fontsource-variable/manrope';
+import '@fontsource/dm-mono/400.css';
+import '@fontsource/dm-mono/500.css';
 import '../styles/global.css';
 import { site } from '../data/site';
 
@@ -13,7 +17,7 @@ const basePath = import.meta.env.BASE_URL.endsWith('/')
   ? import.meta.env.BASE_URL
   : `${import.meta.env.BASE_URL}/`;
 // A imagem usa URL absoluta porque LinkedIn, WhatsApp e outros crawlers não resolvem caminhos relativos.
-const socialImage = new URL(`${basePath}images/og-felex.png`, Astro.site);
+const socialImage = new URL(`${basePath}images/og-felex.jpg`, Astro.site);
 // Dados estruturados conectam a pessoa, o nome curto "Felex" e a marca FelexTech nas buscas.
 const profileSchema = JSON.stringify({
   '@context': 'https://schema.org',
@@ -56,11 +60,11 @@ const profileSchema = JSON.stringify({
     <meta name="theme-color" content="#071015" />
     <meta name="color-scheme" content="dark" />
     <link rel="canonical" href={canonical} />
-    <!-- F branco do kit v6 para abas e atalhos, na mesma família visual do cabeçalho. -->
-    <link rel="icon" href={`${basePath}images/felextech_media_kit_v6/05_favicon_F_transparente/favicon_F_branco_transparente.ico`} sizes="any" />
-    <link rel="icon" href={`${basePath}images/felextech_media_kit_v6/05_favicon_F_transparente/favicon_F_branco_transparente_32.png`} type="image/png" sizes="32x32" />
-    <link rel="icon" href={`${basePath}images/felextech_media_kit_v6/05_favicon_F_transparente/favicon_F_branco_transparente_16.png`} type="image/png" sizes="16x16" />
-    <link rel="apple-touch-icon" href={`${basePath}images/felextech_media_kit_v6/05_favicon_F_transparente/favicon_F_branco_transparente_180.png`} sizes="180x180" />
+    <!-- F branco do kit v6 (cópias em public/favicons) para abas e atalhos. -->
+    <link rel="icon" href={`${basePath}favicons/favicon.ico`} sizes="any" />
+    <link rel="icon" href={`${basePath}favicons/favicon_32.png`} type="image/png" sizes="32x32" />
+    <link rel="icon" href={`${basePath}favicons/favicon_16.png`} type="image/png" sizes="16x16" />
+    <link rel="apple-touch-icon" href={`${basePath}favicons/favicon_180.png`} sizes="180x180" />
     <!-- Metadados usados para criar uma prévia consistente ao compartilhar o portfólio. -->
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="pt_BR" />
@@ -78,12 +82,8 @@ const profileSchema = JSON.stringify({
     <meta name="twitter:image" content={socialImage} />
     <meta name="twitter:image:alt" content="FelexTech — Integração, Automação e IA" />
     <script type="application/ld+json" set:html={profileSchema}></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Manrope:wght@400;500;600&display=swap"
-      rel="stylesheet"
-    />
+    <!-- Marca a página como "com JS" antes da pintura; sem JS, os blocos .reveal ficam visíveis. -->
+    <script is:inline>document.documentElement.classList.add('js');</script>
     <title>{title}</title>
   </head>
   <body>

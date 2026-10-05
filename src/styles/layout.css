@@ -1,21 +1,30 @@
 /* Estrutura compartilhada: mantém o respiro lateral no desktop sem desenhar uma moldura vertical. */
 .page-shell { width: var(--page); margin: 0 auto; }
-.site-header { position: relative; z-index: 10; display: flex; align-items: center; justify-content: space-between; height: 88px; padding-inline: 42px; border-bottom: 1px solid var(--line); }
+
+/* Cabeçalho fixo. O fundo fica no ::before para ocupar a largura toda da tela e para que o
+   backdrop-filter não vire bloco de contenção do menu móvel (position: fixed). */
+.site-header { position: sticky; top: 0; z-index: 30; display: flex; align-items: center; justify-content: space-between; height: var(--header-h); padding-inline: 42px; border-bottom: 1px solid var(--line); transition: height .25s ease; }
+.site-header::before { content: ''; position: absolute; inset-block: 0 -1px; left: 50%; z-index: -1; width: 100vw; background: rgba(7, 16, 21, .84); border-bottom: 1px solid var(--line); opacity: 0; transform: translateX(-50%); transition: opacity .25s ease; -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); }
+.site-header.is-scrolled::before, .site-header.menu-open::before { opacity: 1; }
 .brand { display: inline-flex; align-items: center; gap: 12px; font-weight: 700; letter-spacing: .2em; }
 /* O emblema já tem sombra própria; sem moldura, ele se integra ao fundo do cabeçalho. */
 .brand-mark { display: block; width: 38px; height: 38px; object-fit: contain; }
 .site-nav { display: flex; gap: clamp(22px, 2.5vw, 42px); font: 500 12px var(--mono); }
 .site-nav a, .footer-links a, .site-footer > a { color: var(--muted); transition: color .2s ease; }
-.site-nav a:hover, .site-nav a:focus-visible, .footer-links a:hover, .footer-links a:focus-visible, .site-footer > a:hover, .site-footer > a:focus-visible { color: var(--accent); }
-/* No desktop, a navegação fica um nível acima do texto secundário para leitura em monitores escuros. */
+.site-nav a:hover, .site-nav a:focus-visible, .site-nav a[aria-current], .footer-links a:hover, .footer-links a:focus-visible, .site-footer > a:hover, .site-footer > a:focus-visible { color: var(--accent); }
+/* No desktop, a navegação fica um nível acima do texto secundário e marca a seção ativa com um traço. */
 @media (min-width: 721px) {
-  .site-nav a { color: #c0cdd5; }
+  .site-header.is-scrolled { height: 68px; }
+  .site-nav a { position: relative; color: #c0cdd5; }
+  .site-nav a::after { content: ''; position: absolute; right: 0; bottom: -8px; left: 0; height: 1px; background: currentColor; transform: scaleX(0); transform-origin: left; transition: transform .25s ease; }
+  .site-nav a[aria-current] { color: var(--accent); }
+  .site-nav a[aria-current]::after { transform: scaleX(1); }
 }
 /* O botão é revelado no módulo responsive.css. */
 .menu-button { display: none; color: var(--text); background: transparent; border: 0; font: 13px var(--mono); }
-.site-footer { display: grid; grid-template-columns: 1.4fr 1fr 1fr; align-items: center; min-height: 100px; padding-inline: 42px; border-top: 1px solid var(--line); color: var(--muted); font: 11px var(--mono); text-transform: uppercase; }
+.site-footer { display: grid; grid-template-columns: 1.4fr 1fr 1fr; align-items: center; min-height: 100px; padding-inline: 42px; border-top: 1px solid var(--line); color: var(--muted); font: 12px var(--mono); text-transform: uppercase; }
 .footer-brand { display: flex; align-items: center; gap: 18px; }
 .footer-brand strong { color: var(--text); letter-spacing: .25em; }
-.footer-brand span { font-size: 10px; text-transform: none; }
+.footer-brand span { font-size: 12px; text-transform: none; }
 .footer-links { display: flex; justify-content: center; gap: 24px; }
 .site-footer > a { justify-self: end; }

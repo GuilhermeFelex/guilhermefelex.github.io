@@ -12,6 +12,7 @@
   --mint: #14342f;
   --coral: #ff9278;
   --page: min(1360px, calc(100vw - 64px));
-  --sans: 'Manrope', 'Helvetica Neue', Arial, sans-serif;
+  --header-h: 88px;
+  --sans: 'Manrope Variable', 'Manrope', 'Helvetica Neue', Arial, sans-serif;
   --mono: 'DM Mono', 'SFMono-Regular', Consolas, monospace;
 }

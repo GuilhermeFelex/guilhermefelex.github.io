@@ -1,17 +1,13 @@
 ---
+import { Image } from 'astro:assets';
+import emblem from '../assets/brand/emblema-f.png';
 import { site } from '../data/site';
 ---
 
 <header class="site-header" data-header>
   <a class="brand" href="#top" aria-label="Felex — voltar ao início">
-    <!-- Variante branca com sombra do kit v6: destaca o símbolo no cabeçalho escuro. -->
-    <img
-      class="brand-mark"
-      src="/images/felextech_media_kit_v6/08_variantes_e_ajustes_solicitados/03_elementos_brancos_com_sombra/emblema_F_branco_com_sombra_1254.png"
-      width="1254"
-      height="1254"
-      alt=""
-    />
+    <!-- Emblema branco com sombra do kit v6, reduzido na build para o tamanho exibido (2x). -->
+    <Image class="brand-mark" src={emblem} width={76} height={76} format="webp" alt="" loading="eager" />
     <span class="brand-name">{site.name}</span>
   </a>
 
@@ -104,4 +100,33 @@ import { site } from '../data/site';
   // Ao sair do breakpoint móvel, remove o estado acessível usado pelo menu sobreposto.
   mobileMenu.addEventListener('change', () => setMenuState(false));
   setMenuState(false);
+
+  // Cabeçalho fixo: ganha fundo e fica mais compacto depois do início da página.
+  const syncScrolled = () => header?.classList.toggle('is-scrolled', window.scrollY > 8);
+  syncScrolled();
+  window.addEventListener('scroll', syncScrolled, { passive: true });
+
+  // Destaca no menu a seção que ocupa o centro da tela.
+  const linkBySection = new Map(
+    [...links].map((link) => [link.hash.slice(1), link] as const)
+  );
+  const sectionObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        const link = linkBySection.get(entry.target.id);
+        if (!link) return;
+        if (entry.isIntersecting) {
+          links.forEach((item) => item.removeAttribute('aria-current'));
+          link.setAttribute('aria-current', 'true');
+        } else if (link.getAttribute('aria-current')) {
+          link.removeAttribute('aria-current');
+        }
+      });
+    },
+    { rootMargin: '-45% 0px -50% 0px' }
+  );
+  linkBySection.forEach((_, id) => {
+    const section = document.getElementById(id);
+    if (section) sectionObserver.observe(section);
+  });
 </script>

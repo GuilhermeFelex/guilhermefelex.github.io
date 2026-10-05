@@ -142,6 +142,8 @@ try {
       );
 
       await page.keyboard.press('Escape');
+      // Espera o fade do menu terminar para a screenshot não registrar o menu semitransparente.
+      await page.waitForTimeout(300);
       const closedMenu = await page.evaluate(() => ({
         expanded: document.querySelector('.menu-button')?.getAttribute('aria-expanded'),
         mainIsInert: document.querySelector('main')?.hasAttribute('inert'),

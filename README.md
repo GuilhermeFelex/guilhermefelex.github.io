@@ -32,9 +32,13 @@ Abra `http://localhost:4321` no navegador.
 ## Estrutura do projeto
 
 ```text
+brand/                # Kit de marca completo e arquivos legados (fora do deploy)
+public/               # Somente o que o site publica: favicons, imagem OG e robots.txt
 src/
-├── components/       # Componentes reutilizáveis da interface
-├── data/site.ts      # Conteúdo: perfil, projetos, stack e links sociais
+├── assets/brand/     # Imagens otimizadas na build (astro:assets)
+├── components/       # Header, HeroDiagram (diagrama animado) e SectionTitle
+├── icons/            # Ícones SVG locais usados pelo astro-icon (ex.: power-platform)
+├── data/site.ts      # Conteúdo: perfil, projetos, stack (ícone + cor) e links sociais
 ├── layouts/          # Estrutura HTML compartilhada e metadados
 ├── pages/index.astro # Página principal do portfólio
 └── styles/           # Estilos separados por responsabilidade
@@ -68,6 +72,8 @@ Edite [`src/data/site.ts`](src/data/site.ts) para atualizar:
 - Especialidades e tecnologias;
 - Projetos em destaque;
 - Stack atual.
+
+Os ícones usam [astro-icon](https://www.astroicon.dev/) com os sets do Iconify: `simple-icons:*` para marcas e `lucide:*` para ícones de interface. Para um ícone que não existe nesses sets, salve o SVG em `src/icons/` (com `fill="currentColor"`) e use o nome do arquivo. As fontes (Manrope e DM Mono) vêm do Fontsource e são servidas pelo próprio site. O sitemap é gerado na build pelo `@astrojs/sitemap`.
 
 Os links de GitHub e LinkedIn ficam ocultos no rodapé enquanto estiverem vazios. Basta adicionar uma URL válida para exibi-los.
 
