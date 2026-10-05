@@ -1,0 +1,19 @@
+# Atualizações automáticas de dependências. Cada PR passa pelo CI (axe, responsivo, Lighthouse)
+# antes de poder ir para a main.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    groups:
+      # Patches e minors juntos num PR só; versões maiores (ex.: Astro 6 → 7) vêm separadas.
+      dependencias:
+        update-types: [minor, patch]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly

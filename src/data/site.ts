@@ -1,88 +1,37 @@
+/**
+ * Dados compartilhados pelos dois idiomas. Os textos da página ficam em src/i18n/content.ts.
+ */
 export const site = {
   name: 'Felex',
-  role: 'Desenvolvedor de Integração, Automação e Agentes de IA',
-  location: 'São Paulo, Brasil',
-  email: 'guilherme.felex@hotmail.com',
+  fullName: 'Guilherme Felex',
+  // Marca comercial: o site vende os serviços da FelexTech; o nome pessoal aparece como fundador.
+  brand: 'FelexTech',
+  // Separado em partes: o endereço completo só é montado no navegador (src/scripts/email.ts).
+  email: { user: 'guilherme.felex', domain: 'hotmail.com' },
   social: {
     github: 'https://github.com/GuilhermeFelex',
     linkedin: 'https://www.linkedin.com/in/guilhermefelex/',
     instagram: 'https://www.instagram.com/felextech'
-  }
+  },
+  /**
+   * Analytics sem cookies (GoatCounter). Crie o site em goatcounter.com e informe só o código,
+   * por exemplo 'felextech' para felextech.goatcounter.com. Vazio desativa o script.
+   */
+  goatcounter: ''
 };
 
-export const expertise = [
-  {
-    number: '01',
-    icon: 'link',
-    title: 'Integrações',
-    description: 'Sistemas que conversam entre si com segurança, rastreabilidade e contexto de negócio.',
-    tags: ['APIs', 'Webhooks', 'ERP', 'CRM', 'Marketplaces']
-  },
-  {
-    number: '02',
-    icon: 'settings',
-    title: 'Automação',
-    description: 'Processos manuais transformados em fluxos confiáveis, mensuráveis e escaláveis.',
-    tags: ['RPA', 'n8n', 'Fluxos', 'Processos']
-  },
-  {
-    number: '03',
-    icon: 'brain',
-    title: 'Agentes de IA',
-    description: 'IA aplicada ao trabalho real, conectada a dados, ferramentas e regras da operação.',
-    tags: ['LLMs', 'RAG', 'Ferramentas', 'OpenAI']
-  },
-  {
-    number: '04',
-    icon: 'cube',
-    title: 'Soluções digitais',
-    description: 'Aplicações empresariais modulares, preparadas para crescer sem perder clareza.',
-    tags: ['Next.js', 'React', 'TypeScript', 'PostgreSQL']
-  }
-];
-
-export const projects = [
-  {
-    number: '01',
-    title: 'Dominus OS',
-    description: 'Centraliza cadastro, atendimento e regras de operação para times que usam CRM, ERP e IA no mesmo fluxo.',
-    tags: ['SaaS', 'CRM', 'ERP', 'IA'],
-    scope: 'CRM · ERP · IA'
-  },
-  {
-    number: '02',
-    title: 'Operação multicanal',
-    description: 'Conecta ERP, marketplaces e canais de atendimento para sincronizar pedidos, estoque e atualizações operacionais.',
-    tags: ['Integrações', 'Marketplaces', 'Automação'],
-    scope: 'Pedidos · estoque · atendimento'
-  },
-  {
-    number: '03',
-    title: 'Automação com IA',
-    description: 'Orquestra agentes com base de conhecimento, ferramentas e regras de aprovação para tarefas que exigem contexto.',
-    tags: ['Agentes', 'RAG', 'Fluxos'],
-    scope: 'RAG · agentes · fluxos'
-  },
-  {
-    number: '04',
-    title: 'Operações de atendimento',
-    description: 'Organiza triagem, roteamento e acompanhamento de demandas entre mensageria, CRM e rotinas internas.',
-    tags: ['Mensageria', 'CRM', 'Automação'],
-    scope: 'Atendimento · CRM · operações'
-  }
-];
-
+// Ícones monocromáticos na grade; a cor da marca aparece somente no hover.
 export const stack = [
-  'Next.js',
-  'React',
-  'TypeScript',
-  'Node.js',
-  'PostgreSQL',
-  'Supabase',
-  'Docker',
-  'n8n',
-  'OpenAI',
-  'UiPath',
-  'Power Platform',
-  'AWS'
+  { name: 'Python', icon: 'simple-icons:python', color: '#ffd43b' },
+  { name: 'Next.js', icon: 'simple-icons:nextdotjs', color: '#e7eef2' },
+  { name: 'React', icon: 'simple-icons:react', color: '#61dafb' },
+  { name: 'TypeScript', icon: 'simple-icons:typescript', color: '#3178c6' },
+  { name: 'PostgreSQL', icon: 'simple-icons:postgresql', color: '#5d99c7' },
+  { name: 'Supabase', icon: 'simple-icons:supabase', color: '#3ecf8e' },
+  { name: 'Docker', icon: 'simple-icons:docker', color: '#2496ed' },
+  { name: 'n8n', icon: 'simple-icons:n8n', color: '#ea4b71' },
+  { name: 'OpenAI', icon: 'simple-icons:openai', color: '#e7eef2' },
+  { name: 'UiPath', icon: 'uipath', color: '#fa4616' },
+  { name: 'Power Platform', icon: 'power-platform', color: '#2fb5a0' },
+  { name: 'AWS', icon: 'simple-icons:amazonwebservices', color: '#ff9900' }
 ];

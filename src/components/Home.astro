@@ -1,0 +1,361 @@
+---
+/**
+ * Página inicial completa, renderizada para cada idioma por src/pages/index.astro e src/pages/en/index.astro.
+ */
+import { Icon } from 'astro-icon/components';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from './Header.astro';
+import HeroDiagram from './HeroDiagram.astro';
+import SectionTitle from './SectionTitle.astro';
+import { site, stack } from '../data/site';
+import { content } from '../i18n/content';
+import { cvUrl, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = content[lang];
+
+const socialLinks = [
+  { label: 'GitHub', href: site.social.github },
+  { label: 'LinkedIn', href: site.social.linkedin },
+  { label: 'Instagram', href: site.social.instagram }
+].filter((item) => item.href);
+
+const year = new Date().getFullYear();
+---
+
+<BaseLayout lang={lang}>
+  <a class="skip-link" href="#conteudo">{t.skipLink}</a>
+  <div class="page-shell" id="top">
+    <Header lang={lang} />
+
+    <main id="conteudo">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-kicker reveal">
+          <span class="signal" aria-hidden="true"></span>
+          <span>{t.hero.kicker}</span>
+          <span class="hero-location">{t.hero.location}</span>
+        </div>
+
+        <div class="hero-copy">
+          <h1 id="hero-title" class="hero-title reveal">
+            {t.hero.titleStart} <span>{t.hero.titleAccent}</span> {t.hero.titleEnd}
+          </h1>
+
+          <div class="hero-bottom reveal">
+            <p>{t.hero.lead}</p>
+            <div class="hero-actions">
+              <a class="text-link" href="#servicos">
+                {t.hero.ctaPrimary}
+                <span aria-hidden="true">↘</span>
+              </a>
+              <a class="hero-contact" href="#trajetoria">{t.hero.ctaSecondary} <span aria-hidden="true">→</span></a>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-visual reveal">
+          <HeroDiagram lang={lang} />
+        </div>
+      </section>
+
+      <section class="about section" id="sobre" aria-labelledby="about-title">
+        <SectionTitle number="01" label={t.about.label} />
+        <div class="about-grid">
+          <h2 id="about-title" class="about-lead reveal">{t.about.lead}</h2>
+          <div class="about-copy reveal">
+            <p>{t.about.introBefore}<strong>{site.fullName}</strong>{t.about.introAfter}</p>
+            <p>{t.about.body}</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Serviços: a parte da página voltada a quem quer contratar a FelexTech. -->
+      <section class="expertise services section" id="servicos" aria-labelledby="services-title">
+        <SectionTitle number="02" label={t.services.label} />
+        <div class="projects-intro reveal">
+          <h2 id="services-title">{t.services.title}</h2>
+          <p>{t.services.intro}</p>
+        </div>
+        <div class="expertise-list">
+          {t.services.items.map((item) => (
+            <article class="expertise-item reveal">
+              <Icon name={item.icon} class="feature-icon" aria-hidden="true" />
+              <div>
+                <h3>{item.title}</h3>
+                <p>{item.description}</p>
+              </div>
+              <ul class="service-deliverables" aria-label={`${t.services.deliverablesLabel} ${item.title}`}>
+                {item.deliverables.map((deliverable) => <li>{deliverable}</li>)}
+              </ul>
+              <ul class="service-tags" aria-label={`${t.services.tagsLabel} ${item.title}`}>
+                {item.tags.map((tag) => <li>{tag}</li>)}
+              </ul>
+            </article>
+          ))}
+        </div>
+        <div class="process reveal">
+          <h3 class="process-label">{t.services.processLabel}</h3>
+          <ol class="process-list">
+            {t.services.process.map((step, index) => (
+              <li>
+                <span class="item-number">{String(index + 1).padStart(2, '0')}</span>
+                <strong>{step.title}</strong>
+                <p>{step.text}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      <section class="projects section" id="projetos" aria-labelledby="projects-title">
+        <SectionTitle number="03" label={t.projects.label} />
+        <div class="projects-intro reveal">
+          <h2 id="projects-title">{t.projects.title}</h2>
+          <p>{t.projects.intro}</p>
+        </div>
+
+        <div class="project-list">
+          {t.projects.items.map((project) => (
+            <article class="project-item reveal">
+              <div class="project-meta">
+                <span class="item-number">{project.number}</span>
+                <span class="project-context">{project.context}</span>
+              </div>
+              <h3>{project.title}</h3>
+              <p>{project.description}</p>
+              <ul class="project-highlights" aria-label={`${t.projects.highlightsLabel} ${project.title}`}>
+                {project.highlights.map((highlight) => <li>{highlight}</li>)}
+              </ul>
+              <ul class="project-tags" aria-label={`${t.services.tagsLabel} ${project.title}`}>
+                {project.tags.map((tag) => <li>{tag}</li>)}
+              </ul>
+            </article>
+          ))}
+        </div>
+        <div class="projects-footer reveal">
+          <p class="projects-contributions">
+            <span>{t.projects.contributionsLabel}:</span> {t.projects.contributions.join(' · ')}
+          </p>
+          <p class="projects-evidence">
+            {t.projects.evidence}
+            <a href={site.social.github} target="_blank" rel="noreferrer" data-goatcounter-click="github-projetos">GitHub</a>.
+          </p>
+        </div>
+      </section>
+
+      <section class="career section" id="trajetoria" aria-labelledby="career-title">
+        <SectionTitle number="04" label={t.career.label} />
+        <h2 id="career-title" class="career-title reveal">{t.career.title}</h2>
+        <ol class="career-list">
+          {t.career.items.map((item) => (
+            <li class="career-item reveal">
+              <span class="career-period">{item.period}</span>
+              <div class="career-role">
+                <h3>{item.company}</h3>
+                <p>{item.role}</p>
+              </div>
+              <p class="career-description">{item.description}</p>
+            </li>
+          ))}
+        </ol>
+        <div class="career-extra reveal">
+          <div>
+            <h3>{t.career.educationLabel}</h3>
+            <ul>
+              {t.career.education.map((entry) => <li>{entry}</li>)}
+            </ul>
+            <h3 class="career-subhead">{t.career.languagesLabel}</h3>
+            <p class="career-languages">{t.career.languages}</p>
+          </div>
+          <div>
+            <h3>{t.career.certificationsLabel}</h3>
+            <ul class="career-badges">
+              {t.career.certifications.map((entry) => <li>{entry}</li>)}
+            </ul>
+          </div>
+        </div>
+        <!-- Stack compacta: as tags de serviços e casos já detalham as ferramentas. -->
+        <div class="career-stack reveal">
+          <h3>{t.stack.label}</h3>
+          <ul class="stack-chips">
+            {stack.map((technology) => (
+              <li style={`--brand: ${technology.color}`}>
+                <Icon name={technology.icon} class="stack-chip-icon" aria-hidden="true" />
+                {technology.name}
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div class="career-links reveal">
+          <a class="career-cv" href={cvUrl(lang)} download data-goatcounter-click="trajetoria-curriculo">
+            <Icon name="lucide:file-down" aria-hidden="true" />
+            {t.career.cvCta}
+          </a>
+          <a class="career-linkedin" href={site.social.linkedin} target="_blank" rel="noreferrer" data-goatcounter-click="trajetoria-linkedin">
+            {t.career.linkedinCta} <span aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </section>
+
+      <section class="contact section" id="contato" aria-labelledby="contact-title">
+        <div class="contact-eyebrow reveal">
+          <span class="signal" aria-hidden="true"></span>
+          <span>{t.contact.eyebrow}</span>
+        </div>
+        <h2 id="contact-title" class="contact-title reveal">{t.contact.title}</h2>
+        <p class="contact-lead reveal">{t.contact.lead}</p>
+        <!-- Dois públicos, dois caminhos: o assunto do email já identifica a conversa. -->
+        <div class="contact-paths reveal">
+          <div class="contact-path">
+            <h3>{t.contact.clients.title}</h3>
+            <p>{t.contact.clients.text}</p>
+            <a
+              class="contact-link"
+              href="#contato"
+              data-mail-user={site.email.user}
+              data-mail-domain={site.email.domain}
+              data-mail-subject={t.contact.clients.subject}
+              data-goatcounter-click="contato-projeto"
+            >
+              {t.contact.clients.cta}
+              <span aria-hidden="true">↗</span>
+            </a>
+          </div>
+          <div class="contact-path">
+            <h3>{t.contact.recruiters.title}</h3>
+            <p>{t.contact.recruiters.text}</p>
+            <a class="contact-secondary" href={site.social.linkedin} target="_blank" rel="noreferrer" data-goatcounter-click="contato-linkedin">
+              <Icon name="lucide:linkedin" aria-hidden="true" />
+              {t.contact.recruiters.cta}
+              <span aria-hidden="true">↗</span>
+            </a>
+            <div class="contact-text-links">
+              <a class="contact-text-link" href={cvUrl(lang)} download data-goatcounter-click="contato-curriculo">
+                {t.career.cvCta} <span aria-hidden="true">↓</span>
+              </a>
+              <a
+                class="contact-text-link"
+                href="#contato"
+                data-mail-user={site.email.user}
+                data-mail-domain={site.email.domain}
+                data-mail-subject={t.contact.recruiters.subject}
+                data-goatcounter-click="contato-oportunidade"
+              >
+                {t.contact.recruiters.emailCta} <span aria-hidden="true">→</span>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="contact-bottom reveal">
+          <div class="contact-actions">
+            <div class="contact-email-row">
+              <!-- O endereço é montado no navegador; sem JS fica a forma legível com "[arroba]". -->
+              <a
+                class="contact-email"
+                href="#contato"
+                data-mail-user={site.email.user}
+                data-mail-domain={site.email.domain}
+                data-mail-text
+                data-copy-target
+              >{t.contact.emailFallback}</a>
+              <!-- Nem todo visitante tem um app de email configurado para abrir o mailto. -->
+              <button
+                class="copy-email"
+                type="button"
+                data-copy
+                data-mail-user={site.email.user}
+                data-mail-domain={site.email.domain}
+                data-copied={t.contact.copied}
+                data-copied-status={t.contact.copiedStatus}
+                data-copy-failed={t.contact.copyFailed}
+                data-copy-failed-status={t.contact.copyFailedStatus}
+                data-goatcounter-click="contato-copiar-email"
+              >
+                <Icon name="lucide:copy" aria-hidden="true" />
+                <span data-copy-label>{t.contact.copy}</span>
+              </button>
+            </div>
+            <span class="contact-location">{t.hero.location} · {t.contact.remote}</span>
+            <span class="sr-only" aria-live="polite" data-copy-status></span>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-brand">
+        <strong>{site.brand}</strong>
+        <span>© {year} {site.brand} · {t.footer.slogan}</span>
+      </div>
+      <div class="footer-links">
+        {socialLinks.map((link) => (
+          <a href={link.href} target="_blank" rel="noreferrer">{link.label}</a>
+        ))}
+      </div>
+      <a href="#top">{t.footer.backToTop} <span aria-hidden="true">↑</span></a>
+    </footer>
+  </div>
+
+  <script>
+    import { hydrateEmail } from '../scripts/email';
+
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const elements = document.querySelectorAll<HTMLElement>('.reveal');
+
+    if (reducedMotion) {
+      elements.forEach((element) => element.classList.add('is-visible'));
+    } else {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.12 }
+      );
+
+      elements.forEach((element) => observer.observe(element));
+    }
+
+    hydrateEmail();
+
+    // Copia o email e confirma visualmente e para leitores de tela; os textos vêm do idioma da página.
+    const copyButton = document.querySelector<HTMLButtonElement>('[data-copy]');
+    const copyLabel = copyButton?.querySelector<HTMLElement>('[data-copy-label]');
+    const copyStatus = document.querySelector<HTMLElement>('[data-copy-status]');
+    const copyTarget = document.querySelector<HTMLElement>('[data-copy-target]');
+    const defaultLabel = copyLabel?.textContent ?? '';
+    let resetLabel: number | undefined;
+
+    const showCopyState = (state: 'is-copied' | 'is-failed', label: string, status: string) => {
+      copyButton?.classList.remove('is-copied', 'is-failed');
+      copyButton?.classList.add(state);
+      if (copyLabel) copyLabel.textContent = label;
+      if (copyStatus) copyStatus.textContent = status;
+      window.clearTimeout(resetLabel);
+      resetLabel = window.setTimeout(() => {
+        copyButton?.classList.remove(state);
+        if (copyLabel) copyLabel.textContent = defaultLabel;
+        if (copyStatus) copyStatus.textContent = '';
+      }, 4000);
+    };
+
+    copyButton?.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(copyButton.dataset.copy ?? '');
+        showCopyState('is-copied', copyButton.dataset.copied ?? '', copyButton.dataset.copiedStatus ?? '');
+      } catch {
+        // Sem permissão de área de transferência: seleciona o endereço para o visitante copiar manualmente.
+        if (copyTarget) window.getSelection()?.selectAllChildren(copyTarget);
+        showCopyState('is-failed', copyButton.dataset.copyFailed ?? '', copyButton.dataset.copyFailedStatus ?? '');
+      }
+    });
+  </script>
+</BaseLayout>

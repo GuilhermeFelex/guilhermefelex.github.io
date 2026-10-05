@@ -1,13 +1,19 @@
 ---
+/**
+ * Rótulo numerado das seções. Use `as="h2"` só quando a seção não tiver outro título visível,
+ * para que cada seção tenha exatamente um h2.
+ */
 interface Props {
   number: string;
   label: string;
+  as?: 'h2' | 'p';
+  id?: string;
 }
 
-const { number, label } = Astro.props;
+const { number, label, as: Tag = 'p', id } = Astro.props;
 ---
 
 <div class="section-title reveal">
   <span>{number}</span>
-  <h2>{label}</h2>
+  <Tag id={id}>{label}</Tag>
 </div>

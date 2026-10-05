@@ -1,11 +1,24 @@
+# Dependências e saídas da build.
 node_modules/
 dist/
 .astro/
+
+# Variáveis de ambiente locais; o .env.example, se existir, continua versionado.
+.env
+.env.*
+!.env.example
+
+# Evidências locais dos testes (screenshots, relatórios do Lighthouse) e cache do LHCI.
+artifacts/
+.lighthouseci/
+
+# Logs (inclui .astro-dev.log e .astro-dev.err.log do servidor usado na revisão no navegador).
+*.log
+npm-debug.log*
+
+# Arquivos de sistema e de editores.
 .DS_Store
-
-# Evidências locais geradas pelo teste visual automatizado.
-artifacts/responsive/
-
-# Logs locais do servidor Astro usados na revisão no navegador.
-.astro-dev.log
-.astro-dev.err.log
+Thumbs.db
+desktop.ini
+.idea/
+*.swp

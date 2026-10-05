@@ -3,6 +3,9 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [main]
+  # PRs para a main rodam as mesmas verificações de qualidade, sem publicar.
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -11,12 +14,14 @@ permissions:
   id-token: write
 
 concurrency:
-  group: pages
+  group: pages-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      PREVIEW_URL: http://127.0.0.1:4321
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -28,6 +33,7 @@ jobs:
           cache: npm
 
       - name: Setup Pages
+        if: github.event_name != 'pull_request'
         uses: actions/configure-pages@v5
 
       - name: Install dependencies
@@ -36,12 +42,47 @@ jobs:
       - name: Build
         run: npm run build
 
+      # O runner ubuntu-latest já traz o Google Chrome, usado pelo Playwright (channel: chrome) e pelo Lighthouse.
+      - name: Start preview server
+        run: |
+          npx astro preview --host 127.0.0.1 --port 4321 &
+          for i in $(seq 1 30); do curl -sf "$PREVIEW_URL" > /dev/null && exit 0; sleep 1; done
+          echo "Preview não respondeu" && exit 1
+
+      - name: Accessibility (axe)
+        run: npm run validate:a11y
+        env:
+          A11Y_BASE_URL: ${{ env.PREVIEW_URL }}
+
+      - name: Content, SEO and behaviour
+        run: npm run validate:site
+        env:
+          SITE_BASE_URL: ${{ env.PREVIEW_URL }}
+
+      - name: Responsive layout
+        run: npm run validate:responsive
+        env:
+          RESPONSIVE_BASE_URL: ${{ env.PREVIEW_URL }}
+
+      - name: Lighthouse
+        run: npm run lighthouse
+
+      - name: Upload quality reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: quality-reports
+          path: artifacts/
+          retention-days: 14
+
       - name: Upload artifact
+        if: github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./dist
 
   deploy:
+    if: github.event_name != 'pull_request'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

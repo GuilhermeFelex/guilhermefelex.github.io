@@ -1,31 +1,50 @@
 ---
+import { Image } from 'astro:assets';
+import emblem from '../assets/brand/emblema-f.png';
 import { site } from '../data/site';
+import { content } from '../i18n/content';
+import { homeUrl, languages, otherLang, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const { header } = content[lang];
+const alternate = otherLang(lang);
 ---
 
 <header class="site-header" data-header>
-  <a class="brand" href="#top" aria-label="Felex — voltar ao início">
-    <!-- Variante branca com sombra do kit v6: destaca o símbolo no cabeçalho escuro. -->
-    <img
-      class="brand-mark"
-      src="/images/felextech_media_kit_v6/08_variantes_e_ajustes_solicitados/03_elementos_brancos_com_sombra/emblema_F_branco_com_sombra_1254.png"
-      width="1254"
-      height="1254"
-      alt=""
-    />
-    <span class="brand-name">{site.name}</span>
+  <a class="brand" href="#top" aria-label={header.brandLabel}>
+    <!-- Emblema branco com sombra do kit v6, reduzido na build para o tamanho exibido (2x). -->
+    <Image class="brand-mark" src={emblem} width={76} height={76} format="webp" alt="" loading="eager" />
+    <span class="brand-name">{site.brand}</span>
   </a>
 
   <button class="menu-button" type="button" aria-expanded="false" aria-controls="site-navigation">
-    <span>Menu</span>
+    <span>{header.menu}</span>
     <span class="menu-icon" aria-hidden="true"></span>
   </button>
 
-  <nav id="site-navigation" class="site-nav" aria-label="Navegação principal">
-    <a href="#sobre">Sobre</a>
-    <a href="#especialidades">Especialidades</a>
-    <a href="#projetos">Projetos</a>
-    <a href="#contato">Contato</a>
+  <nav id="site-navigation" class="site-nav" aria-label={header.navLabel}>
+    <a href="#sobre">{header.nav.about}</a>
+    <a href="#servicos">{header.nav.services}</a>
+    <a href="#projetos">{header.nav.projects}</a>
+    <a href="#trajetoria">{header.nav.career}</a>
+    <a href="#contato">{header.nav.contact}</a>
   </nav>
+
+  <!-- Fora do menu móvel para ficar sempre a um toque de distância. -->
+  <a
+    class="lang-switch"
+    href={homeUrl(alternate)}
+    hreflang={languages[alternate].htmlLang}
+    lang={languages[alternate].htmlLang}
+    aria-label={header.switchLabel}
+    data-goatcounter-click={`idioma-${alternate}`}
+  >
+    {languages[alternate].short}
+  </a>
 </header>
 
 <script>
@@ -33,6 +52,7 @@ import { site } from '../data/site';
   const button = document.querySelector<HTMLButtonElement>('.menu-button');
   const navigation = document.querySelector<HTMLElement>('.site-nav');
   const brand = document.querySelector<HTMLElement>('.brand');
+  const langSwitch = document.querySelector<HTMLElement>('.lang-switch');
   const links = document.querySelectorAll<HTMLAnchorElement>('.site-nav a');
   const mobileMenu = window.matchMedia('(max-width: 720px)');
   const inactiveContent = document.querySelectorAll<HTMLElement>('main, .site-footer');
@@ -48,6 +68,7 @@ import { site } from '../data/site';
       document.body.classList.remove('nav-open');
       navigation?.removeAttribute('aria-hidden');
       brand?.removeAttribute('inert');
+      langSwitch?.removeAttribute('inert');
       inactiveContent.forEach((element) => element.removeAttribute('inert'));
       return;
     }
@@ -59,6 +80,7 @@ import { site } from '../data/site';
 
     // `inert` impede que Tab alcance o conteúdo que está visualmente atrás do menu aberto.
     brand?.toggleAttribute('inert', isOpen);
+    langSwitch?.toggleAttribute('inert', isOpen);
     inactiveContent.forEach((element) => element.toggleAttribute('inert', isOpen));
 
     if (isOpen) {
@@ -104,4 +126,33 @@ import { site } from '../data/site';
   // Ao sair do breakpoint móvel, remove o estado acessível usado pelo menu sobreposto.
   mobileMenu.addEventListener('change', () => setMenuState(false));
   setMenuState(false);
+
+  // Cabeçalho fixo: ganha fundo e fica mais compacto depois do início da página.
+  const syncScrolled = () => header?.classList.toggle('is-scrolled', window.scrollY > 8);
+  syncScrolled();
+  window.addEventListener('scroll', syncScrolled, { passive: true });
+
+  // Destaca no menu a seção que ocupa o centro da tela.
+  const linkBySection = new Map(
+    [...links].map((link) => [link.hash.slice(1), link] as const)
+  );
+  const sectionObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        const link = linkBySection.get(entry.target.id);
+        if (!link) return;
+        if (entry.isIntersecting) {
+          links.forEach((item) => item.removeAttribute('aria-current'));
+          link.setAttribute('aria-current', 'true');
+        } else if (link.getAttribute('aria-current')) {
+          link.removeAttribute('aria-current');
+        }
+      });
+    },
+    { rootMargin: '-45% 0px -50% 0px' }
+  );
+  linkBySection.forEach((_, id) => {
+    const section = document.getElementById(id);
+    if (section) sectionObserver.observe(section);
+  });
 </script>

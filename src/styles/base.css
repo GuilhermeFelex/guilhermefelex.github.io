@@ -1,19 +1,24 @@
 /* Reset pequeno e estilos que se aplicam a todas as páginas. */
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; background: var(--bg); }
-body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.6 var(--sans); -webkit-font-smoothing: antialiased; }
+/* O padding compensa o cabeçalho fixo ao navegar pelas âncoras. */
+html { scroll-behavior: smooth; scroll-padding-top: 76px; background: var(--bg); }
+/* `clip` corta o fundo de largura total do cabeçalho sem quebrar o position: sticky. */
+body { margin: 0; overflow-x: clip; background: var(--bg); color: var(--text); font: 16px/1.6 var(--sans); -webkit-font-smoothing: antialiased; }
 
 /* Luzes discretas dão profundidade sem competir com o conteúdo. */
 body::before { content: ''; position: fixed; inset: 0; z-index: 20; pointer-events: none; background: radial-gradient(circle at 78% 4%, rgba(65, 159, 207, .10), transparent 24%), radial-gradient(circle at 8% 52%, rgba(34, 89, 105, .10), transparent 25%); }
 ::selection { background: var(--accent); color: #071015; }
 a { color: inherit; text-decoration: none; }
 button, a { -webkit-tap-highlight-color: transparent; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+/* Títulos grandes quebram em linhas equilibradas, sem palavras órfãs. */
+h1, h2, h3 { text-wrap: balance; }
 
 /* Link de acessibilidade: aparece somente ao receber foco via teclado. */
 .skip-link { position: fixed; top: 12px; left: 12px; z-index: 100; padding: 10px 14px; background: var(--accent); color: #071015; transform: translateY(-160%); transition: transform .2s ease; }
 .skip-link:focus { transform: translateY(0); }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 
-/* Animação reutilizada pela página; o script adiciona .is-visible. */
-.reveal { opacity: 0; transform: translateY(22px); transition: opacity .7s cubic-bezier(.2, .7, .2, 1), transform .7s cubic-bezier(.2, .7, .2, 1); }
-.reveal.is-visible { opacity: 1; transform: none; }
+/* Animação de entrada. Só esconde o conteúdo quando há JS (classe .js no <html>) para revelá-lo depois. */
+.js .reveal { opacity: 0; transform: translateY(22px); transition: opacity .7s cubic-bezier(.2, .7, .2, 1), transform .7s cubic-bezier(.2, .7, .2, 1); }
+.js .reveal.is-visible { opacity: 1; transform: none; }

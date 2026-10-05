@@ -10,11 +10,14 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { setTimeout as wait } from 'node:timers/promises';
 import { chromium } from 'playwright';
+import { astroCli } from './lib/astro-cli.mjs';
 
 const root = process.cwd();
 const outputDir = path.join(root, 'artifacts', 'responsive');
 const baseUrl = process.env.RESPONSIVE_BASE_URL ?? 'http://127.0.0.1:4321';
 const viewports = [320, 375, 768, 1024, 1440];
+// Português na raiz e inglês em /en/; o prefixo identifica as screenshots de cada idioma.
+const pages = [{ slug: 'pt', path: '/' }, { slug: 'en', path: '/en/' }];
 const height = Number(process.env.RESPONSIVE_HEIGHT ?? 900);
 const startsServer = !process.env.RESPONSIVE_BASE_URL;
 
@@ -36,7 +39,6 @@ async function waitForServer() {
 /** Inicia o servidor somente quando uma URL externa não foi informada. */
 function startServer() {
   // Chamar o CLI pelo mesmo Node evita o erro EINVAL que ocorre ao executar npm.cmd no Windows.
-  const astroCli = path.join(root, 'node_modules', 'astro', 'astro.js');
   return spawn(process.execPath, [astroCli, 'dev', '--host', '127.0.0.1'], {
     cwd: root,
     stdio: 'inherit',
@@ -48,7 +50,7 @@ function expectedLayout(width) {
   if (width <= 560) return { menuVisible: true, projectColumns: 1 };
   if (width <= 720) return { menuVisible: true, projectColumns: 2 };
   if (width <= 900) return { menuVisible: false, projectColumns: 2 };
-  return { menuVisible: false, projectColumns: 4 };
+  return { menuVisible: false, projectColumns: 2 };
 }
 
 let server;
@@ -72,9 +74,9 @@ try {
   const results = [];
   const failures = [];
 
-  for (const width of viewports) {
+  for (const { slug, path: pagePath } of pages) for (const width of viewports) {
     await page.setViewportSize({ width, height });
-    await page.goto(baseUrl, { waitUntil: 'networkidle' });
+    await page.goto(new URL(pagePath, baseUrl).href, { waitUntil: 'networkidle' });
     await page.evaluate(() => document.fonts.ready);
 
     // A captura full-page não dispara o IntersectionObserver das seções fora da viewport.
@@ -142,6 +144,8 @@ try {
       );
 
       await page.keyboard.press('Escape');
+      // Espera o fade do menu terminar para a screenshot não registrar o menu semitransparente.
+      await page.waitForTimeout(300);
       const closedMenu = await page.evaluate(() => ({
         expanded: document.querySelector('.menu-button')?.getAttribute('aria-expanded'),
         mainIsInert: document.querySelector('main')?.hasAttribute('inert'),
@@ -166,13 +170,13 @@ try {
       projectsMatchBreakpoint: metrics.projectColumns === expected.projectColumns,
       menuAccessible: menuAccessibility.passed
     };
-    const result = { width, height, ...metrics, expected, menuAccessibility, checks };
+    const result = { page: pagePath, width, height, ...metrics, expected, menuAccessibility, checks };
     results.push(result);
 
-    await page.screenshot({ path: path.join(outputDir, `portfolio-${width}.png`), fullPage: true });
+    await page.screenshot({ path: path.join(outputDir, `portfolio-${slug}-${width}.png`), fullPage: true });
 
     for (const [name, passed] of Object.entries(checks)) {
-      if (!passed) failures.push(`${width}px: ${name}`);
+      if (!passed) failures.push(`${pagePath} ${width}px: ${name}`);
     }
   }
 
@@ -185,7 +189,7 @@ try {
     throw new Error(`Validação responsiva falhou:\n- ${failures.join('\n- ')}`);
   }
 
-  console.log(`Validação responsiva aprovada: ${viewports.join(', ')}px.`);
+  console.log(`Validação responsiva aprovada em ${pages.map((item) => item.path).join(' e ')}: ${viewports.join(', ')}px.`);
   console.log(`Evidências salvas em ${path.relative(root, outputDir)}.`);
 } finally {
   await browser?.close();
