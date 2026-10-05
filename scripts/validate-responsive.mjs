@@ -10,6 +10,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { setTimeout as wait } from 'node:timers/promises';
 import { chromium } from 'playwright';
+import { astroCli } from './lib/astro-cli.mjs';
 
 const root = process.cwd();
 const outputDir = path.join(root, 'artifacts', 'responsive');
@@ -38,7 +39,6 @@ async function waitForServer() {
 /** Inicia o servidor somente quando uma URL externa não foi informada. */
 function startServer() {
   // Chamar o CLI pelo mesmo Node evita o erro EINVAL que ocorre ao executar npm.cmd no Windows.
-  const astroCli = path.join(root, 'node_modules', 'astro', 'astro.js');
   return spawn(process.execPath, [astroCli, 'dev', '--host', '127.0.0.1'], {
     cwd: root,
     stdio: 'inherit',

@@ -10,6 +10,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { setTimeout as wait } from 'node:timers/promises';
 import { chromium } from 'playwright';
+import { astroCli } from './lib/astro-cli.mjs';
 import YAML from 'yaml';
 
 const root = process.cwd();
@@ -88,8 +89,7 @@ try {
 
   // ---------- Verificações no navegador ----------
   if (startsServer) {
-    const astroCli = path.join(root, 'node_modules', 'astro', 'astro.js');
-    const { port } = new URL(baseUrl);
+      const { port } = new URL(baseUrl);
     server = spawn(process.execPath, [astroCli, 'preview', '--host', '127.0.0.1', '--port', port], { cwd: root, stdio: 'ignore', windowsHide: true });
   }
   await waitForServer();

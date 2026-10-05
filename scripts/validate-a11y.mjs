@@ -6,10 +6,10 @@
  * Também verifica o menu móvel aberto, que só existe depois de interação.
  */
 import { spawn } from 'node:child_process';
-import path from 'node:path';
 import { setTimeout as wait } from 'node:timers/promises';
 import AxeBuilder from '@axe-core/playwright';
 import { chromium } from 'playwright';
+import { astroCli } from './lib/astro-cli.mjs';
 
 const root = process.cwd();
 const baseUrl = process.env.A11Y_BASE_URL ?? 'http://127.0.0.1:4331';
@@ -35,7 +35,6 @@ async function waitForServer() {
 
 /** Chama o CLI pelo mesmo Node, como no teste responsivo, para evitar o EINVAL do npm.cmd no Windows. */
 function startServer() {
-  const astroCli = path.join(root, 'node_modules', 'astro', 'astro.js');
   const { port } = new URL(baseUrl);
   return spawn(process.execPath, [astroCli, 'preview', '--host', '127.0.0.1', '--port', port], {
     cwd: root,
